@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Cake,
@@ -12,7 +13,6 @@ import {
   LockKeyhole,
   MessageCircleHeart,
 } from "lucide-react";
-import BirthdayChat from "@/components/BirthdayChat";
 const BIRTHDAY_MONTH = 8; // September (0-indexed)
 const BIRTHDAY_DAY = 27;
 const testNow = process.env.NEXT_PUBLIC_BIRTHDAY_TEST_NOW;
@@ -132,7 +132,6 @@ export default function BirthdayExperience() {
   const [entered, setEntered] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [showMessage, setShowMessage] = useState(false);
-  const [showChat, setShowChat] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const target = getBirthdayTarget(now);
@@ -365,13 +364,13 @@ export default function BirthdayExperience() {
                     className="transition-transform group-hover:translate-x-1"
                   />
                 </button>
-                <button
-                  onClick={() => setShowChat((v) => !v)}
+                <Link
+                  href="/room"
                   className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[.04] px-6 py-3 text-sm text-white/70 backdrop-blur transition hover:bg-white/[.08]"
                 >
                   <MessageCircleHeart size={16} />
-                  {showChat ? "Close the chat" : "Talk to Sugar"}
-                </button>
+                  Enter our private room
+                </Link>
                 <button
                   onClick={() => setSoundOn((v) => !v)}
                   className="text-xs text-white/30 hover:text-white/60"
@@ -379,11 +378,6 @@ export default function BirthdayExperience() {
                   {soundOn ? "Mute birthday song" : "Turn birthday song on"}
                 </button>
               </motion.div>
-              <AnimatePresence>
-                {showChat && (
-                  <BirthdayChat onClose={() => setShowChat(false)} />
-                )}
-              </AnimatePresence>
               <AnimatePresence>
                 {showMessage && (
                   <motion.div
